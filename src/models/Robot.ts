@@ -5,14 +5,26 @@ export class Robot {
     private y: number;
     private direction: string;
     private terreno: Terreno;
-  
+    
     constructor() {
         this.x = 0;
         this.y = 0;
         this.direction = 'N';
         this.terreno = new Terreno(10, 10);
     }
-  
+    
+    private setPosition(value: number, max: number): number {
+        if (value < 0) {
+            return max + (value % max);
+        } else {
+            return value % max;
+        }
+    }
+
+    public getPosition(): string {
+        return `${this.x}:${this.y}:${this.direction}`;
+    }
+        
     public processCommands(commands: string) {
         for (const command of commands) {
             if (command === 'L' || command === 'R') {
@@ -38,14 +50,6 @@ export class Robot {
             case 'W':
                 this.x = this.setPosition(this.x - 1, this.terreno.getWidth());
                 break;
-        }
-    }
-
-    private setPosition(value: number, max: number): number {
-        if (value < 0) {
-            return max + (value % max);
-        } else {
-            return value % max;
         }
     }
 
@@ -82,10 +86,5 @@ export class Robot {
             }
         }
     }
-  
-    public getPosition(): string {
-        return `${this.x}:${this.y}:${this.direction}`;
-    }
-
 }
   
