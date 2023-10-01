@@ -3,7 +3,8 @@
 */
 import express from 'express';
 import { moveRobot } from '../controllers/robotController';
+import { validateCommands } from '../middleware/validateCommands';
 
 export const robotRouter = express.Router();
 
-robotRouter.post('/move', moveRobot);
+robotRouter.post('/move', validateCommands, moveRobot);
