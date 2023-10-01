@@ -1,88 +1,90 @@
+import { Terreno } from '../models/Terreno';
+
 export class Robot {
     private x: number;
     private y: number;
     private direction: string;
+    private terreno: Terreno;
   
     constructor() {
-      this.x = 0;
-      this.y = 0;
-      this.direction = 'N';
+        this.x = 0;
+        this.y = 0;
+        this.direction = 'N';
+        this.terreno = new Terreno(10, 10);
     }
   
     public processCommands(commands: string) {
         for (const command of commands) {
-          if (command === 'L' || command === 'R') {
-            this.rotate(command);
-          } else if (command === 'M') {
-            this.move();
-          }
+            if (command === 'L' || command === 'R') {
+                this.rotate(command);
+            } else if (command === 'M') {
+                this.move();
+            }
         }
     }
 
     private move() {
-        let newX = this.x;
-        let newY = this.y;
     
         switch (this.direction) {
-          case 'N':
-            newY++;
-            break;
-          case 'S':
-            newY--;
-            break;
-          case 'E':
-            newX++;
-            break;
-          case 'W':
-            newX--;
-            break;
-          default:
-            throw new Error('Invalid direction');
+            case 'N':
+                this.y = this.setPosition(this.y + 1, this.terreno.getHeight());
+                break;
+            case 'S':
+                this.y = this.setPosition(this.y - 1, this.terreno.getHeight());
+                break;
+            case 'E':
+                this.x = this.setPosition(this.x + 1, this.terreno.getWidth());
+                break;
+            case 'W':
+                this.x = this.setPosition(this.x - 1, this.terreno.getWidth());
+                break;
         }
     }
 
-
+    private setPosition(value: number, max: number): number {
+        if (value < 0) {
+            return max + (value % max);
+        } else {
+            return value % max;
+        }
+    }
 
     private rotate(direction: string) {
         if (direction === 'L') {
             switch (this.direction) {
-            case 'N':
-                this.direction = 'W';
-                break;
-            case 'S':
-                this.direction = 'E';
-                break;
-            case 'E':
-                this.direction = 'N';
-                break;
-            case 'W':
-                this.direction = 'S';
-                break;
-            default:
-                throw new Error('Invalid direction');
+                case 'N':
+                    this.direction = 'W';
+                    break;
+                case 'S':
+                    this.direction = 'E';
+                    break;
+                case 'E':
+                    this.direction = 'N';
+                    break;
+                case 'W':
+                    this.direction = 'S';
+                    break;
             }
         } else if (direction === 'R') {
             switch (this.direction) {
                 case 'N':
-                this.direction = 'E';
-                break;
+                    this.direction = 'E';
+                    break;
                 case 'S':
-                this.direction = 'W';
-                break;
+                    this.direction = 'W';
+                    break;
                 case 'E':
-                this.direction = 'S';
-                break;
+                    this.direction = 'S';
+                    break;
                 case 'W':
-                this.direction = 'N';
-                break;
-                default:
-                throw new Error('Invalid direction');
+                    this.direction = 'N';
+                    break;
             }
         }
     }
   
     public getPosition(): string {
-      return `${this.x}:${this.y}:${this.direction}`;
+        return `${this.x}:${this.y}:${this.direction}`;
     }
 
 }
